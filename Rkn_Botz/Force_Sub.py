@@ -55,7 +55,7 @@ async def handle_force_sub(client: Client, message: Message):
     )
 
     try:
-        member = await client.get_chat_member(Config.FORCE_SUB, user_id)
+        member = await client.get_chat_member(Rkn_Botz.FORCE_SUB, user_id)
         if member.status == enums.ChatMemberStatus.BANNED:
             return await message.reply_text(
                 "**🚫 You are banned from using this bot.**\nContact admin if this is a mistake."
