@@ -32,7 +32,7 @@ class Rkn_Botz(object):
     PORT = int(os.environ.get("PORT", "8080"))
 
     # Force subscribe channel username (without @) (only public chats username required)
-    FORCE_SUB = os.environ.get("FORCE_SUB", "Rkn_Botz")
+    FORCE_SUB = os.environ.get("FORCE_SUB", "")
 
     # Database config (required)
     DB_NAME = os.environ.get("DB_NAME", "AutoCaption_V05_Bot")
@@ -51,7 +51,7 @@ class Rkn_Botz(object):
     )
 
     # Admin ID (single integer)
-    ADMIN = int(os.environ.get('ADMIN', '5960922591'))  # Yahan default ko apne Telegram User ID se replace karo
+    ADMIN = int(os.environ.get('ADMIN', ''))  # Yahan default ko apne Telegram User ID se replace karo
 
 # ————
 # End of file
@@ -63,5 +63,6 @@ class Rkn_Botz(object):
 # Updates Channel: @Rkn_Bots_Updates & @Rkn_Botz
 # Special Thanks To: @ReshamOwner
 # Update Channels: @Digital_Botz & @DigitalBotz_Support
+
 
 # ⚠️ Please do not remove this credit!
