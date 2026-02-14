@@ -50,7 +50,7 @@ class Rkn_AutoCaptionBot(Client):
         await web.TCPSite(app, bind_address, Rkn_Botz.PORT).start()
         
         print(f"{me.first_name} Iꜱ Sᴛᴀʀᴛᴇᴅ.....✨️")
-        for id Rkn_Botz.ADMIN:
+        id Rkn_Botz.ADMIN:
             try:
                 await self.send_message(id, f"**__{me.first_name}  Iꜱ Sᴛᴀʀᴛᴇᴅ.....✨️__**")
             except:
@@ -75,3 +75,4 @@ Rkn_AutoCaptionBot().run()
 
 
 # ⚠️ Please do not remove this credit!
+
