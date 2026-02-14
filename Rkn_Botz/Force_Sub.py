@@ -19,12 +19,13 @@ from pyrogram.errors import UserNotParticipant
 from config import Rkn_Botz
 from .database import rkn_botz
 
+
 # 🧠 Async callable filter class
 class ForceSubCheck:
     def __init__(self, channel: str):
         self.channel = channel.lstrip("@")
 
-    async def __call__(self, _, client: Client, message: Message) -> bool:
+    async def __call__(self, client: Client, message: Message) -> bool:
         user_id = message.from_user.id
 
         # Register user in DB if not already
@@ -35,7 +36,13 @@ class ForceSubCheck:
 
         try:
             member = await client.get_chat_member(self.channel, user_id)
-            return member.status in [enums.ChatMemberStatus.LEFT, enums.ChatMemberStatus.BANNED]
+
+            # If user is not joined OR banned -> trigger force sub handler
+            if member.status in [enums.ChatMemberStatus.LEFT, enums.ChatMemberStatus.BANNED]:
+                return True
+
+            return False
+
         except UserNotParticipant:
             return True
         except Exception:
@@ -47,7 +54,7 @@ class ForceSubCheck:
 async def handle_force_sub(client: Client, message: Message):
     user_id = message.from_user.id
     chat_link = f"https://t.me/{Rkn_Botz.FORCE_SUB.lstrip('@')}"
-    
+
     # 📢 Button UI
     button = InlineKeyboardMarkup(
         [[InlineKeyboardButton("🔔 Join Update Channel", url=chat_link)]]
@@ -69,7 +76,8 @@ async def handle_force_sub(client: Client, message: Message):
         "**Hey buddy! 🔐 You need to join our updates channel before using me.**",
         reply_markup=button
     )
-    
+
+
 # ————
 # End of file
 # Original author: @RknDeveloperr
