@@ -31,22 +31,28 @@ class ForceSubCheck:
         # Register user in DB if not already
         await rkn_botz.register_user(user_id)
 
+        # If no force sub channel set, allow all users
         if not self.channel:
-            return False  # No force sub set
+            return False
 
         try:
             member = await client.get_chat_member(self.channel, user_id)
 
-            # If user is not joined OR banned -> trigger force sub handler
-            if member.status in [enums.ChatMemberStatus.LEFT, enums.ChatMemberStatus.BANNED]:
-                return True
+            # If user is joined, do NOT trigger force sub
+            if member.status in [
+                enums.ChatMemberStatus.MEMBER,
+                enums.ChatMemberStatus.ADMINISTRATOR,
+                enums.ChatMemberStatus.OWNER
+            ]:
+                return False
 
-            return False
+            # If user is not joined or banned, trigger force sub
+            return True
 
         except UserNotParticipant:
             return True
         except Exception:
-            return False
+            return True
 
 
 # 📩 Handler for blocked users / unsubscribed
@@ -61,11 +67,21 @@ async def handle_force_sub(client: Client, message: Message):
     )
 
     try:
-        member = await client.get_chat_member(Rkn_Botz.FORCE_SUB, user_id)
+        member = await client.get_chat_member(Rkn_Botz.FORCE_SUB.lstrip("@"), user_id)
+
         if member.status == enums.ChatMemberStatus.BANNED:
             return await message.reply_text(
                 "**🚫 You are banned from using this bot.**\nContact admin if this is a mistake."
             )
+
+        # If user is joined, don't show force sub message
+        if member.status in [
+            enums.ChatMemberStatus.MEMBER,
+            enums.ChatMemberStatus.ADMINISTRATOR,
+            enums.ChatMemberStatus.OWNER
+        ]:
+            return
+
     except UserNotParticipant:
         pass
     except Exception as e:
