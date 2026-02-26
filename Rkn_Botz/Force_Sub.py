@@ -24,7 +24,7 @@ from .database import rkn_botz
 def ForceSubCheck(channel):
     channel = channel.lstrip("@")
 
-    async def func(client: Client, message: Message) -> bool:
+    async def func(flt, client: Client, message: Message) -> bool:
         user_id = message.from_user.id
 
         # Register user in DB
@@ -53,11 +53,11 @@ def ForceSubCheck(channel):
         except Exception:
             return True
 
-    return func
+    return filters.create(func, "ForceSubCheck")
 
 
 # 📩 Handler for blocked users / unsubscribed
-@Client.on_message(filters.private & filters.create(ForceSubCheck(Rkn_Botz.FORCE_SUB), "ForceSubCheck"))
+@Client.on_message(filters.private & ForceSubCheck(Rkn_Botz.FORCE_SUB))
 async def handle_force_sub(client: Client, message: Message):
     user_id = message.from_user.id
     channel_username = Rkn_Botz.FORCE_SUB.lstrip("@")
